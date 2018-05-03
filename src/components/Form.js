@@ -23,6 +23,7 @@ class Form extends PureComponent{
 
     let {value} = this.state;
     value && this.props.onSubmit(value);
+    this.setState({value: ''});
   }
 
   render(){
