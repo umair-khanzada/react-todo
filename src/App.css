@@ -9,3 +9,22 @@
 .radio-parent{
     margin-bottom: 10px;
 }
+.todo-list{
+    list-style: none;
+    padding: 0 40px 20px 15px;
+}
+.todo-list li{
+    padding: 5px 0;
+}
+.checkbox-inline{
+    height: 24px;
+}
+.completed{
+    text-decoration: line-through;
+}
+.btn{
+    margin-left: 5px;
+}
+form{
+    height: 80px;
+}

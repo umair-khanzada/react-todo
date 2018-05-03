@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react';
 import PropTypes from "prop-types";
+import Button from './Button';
 
 class Form extends PureComponent{
   constructor(props){
@@ -11,32 +12,53 @@ class Form extends PureComponent{
     //binding ref.
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.onReset = this.onReset.bind(this);
+  }
+
+  //life cycle hooks.
+  componentDidMount(){
+    this.props.selectedTodo && this.setState({value: this.props.selectedTodo.text})
+  }
+
+  componentWillReceiveProps(nextProps){
+    nextProps.selectedTodo && this.setState({value: nextProps.selectedTodo.text})
   }
 
   //handling change, run whenever change event occur.
   handleChange(e){
-    this.setState({value: e.target.value})
+    const {value} = e.target,
+      {onInputChange} = this.props;
+
+    onInputChange && onInputChange(value);
+    this.setState({value})
   }
 
   onSubmit(e){
     e.preventDefault();
 
-    let {value} = this.state;
-    value && this.props.onSubmit(value);
+    const {value} = this.state,
+      {selectedTodo} = this.props;
+    value && this.props.onSubmit(selectedTodo ? selectedTodo.id : null, value);
     this.setState({value: ''});
   }
 
+  onReset(){
+    this.setState({value: ''});
+    this.props.onReset();
+  }
+
   render(){
-    let {placeHolder, buttonLabel} = this.props,
+    const {placeHolder, buttonLabel, selectedTodo, submitButton} = this.props,
       {value} = this.state;
 
     return (
       <form onSubmit={this.onSubmit}>
-        <div className="form-group col-sm-10">
+        <div className={`form-group col-sm-${selectedTodo ? 8 : 10}`}>
           <input type="text" className="form-control"
             placeholder={placeHolder} onChange={this.handleChange} value={value} />
         </div>
-        <button type="submit" className="btn btn-primary" disabled={!value}>{buttonLabel}</button>
+        {selectedTodo && <Button text="cancel" onClick={this.onReset} />}
+        {submitButton && <Button type="submit" disabled={!value} text={selectedTodo ? 'update' : buttonLabel} />}
       </form>
     )
   }
@@ -44,15 +66,22 @@ class Form extends PureComponent{
 
 Form.propTypes = {
   onSubmit: PropTypes.func,
+  onReset: PropTypes.func,
   placeHolder: PropTypes.string,
-  buttonLabel: PropTypes.string
+  buttonLabel: PropTypes.string,
+  onInputChange: PropTypes.func,
+  submitButton: PropTypes.bool,
+  selectedTodo: PropTypes.shape({
+    text: PropTypes.string.isRequired
+  })
 };
 
 //default props for Form component.
 Form.defaultProps = {
-  onSubmit: () => {},
   placeHolder: "Add todo.",
-  buttonLabel: "Add"
+  buttonLabel: "Add",
+  onSubmit: () => {},
+  onReset: () => {}
 };
 
 export default Form;

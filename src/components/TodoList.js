@@ -1,12 +1,21 @@
 import React from 'react';
 import PropTypes from "prop-types";
+import CheckBox from './CheckBox';
+import Button from './Button';
 
-const TodoList = ({data, editHandler, removeHandler}) => {
+const TodoList = ({data, updateTodo, selectTodo, removeTodo, disabledActions}) => {
   return (
-    <ul>
+    <ul className="todo-list">
       {
         data.map(todo => (
-          <li key={todo.id}>{todo.text}</li>
+          <li key={todo.id}>
+            <CheckBox onChange={() => updateTodo(todo.id)} disabled={disabledActions}/>
+            <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
+            <Button className="btn btn-default btn-sm pull-right" onClick={() => removeTodo(todo.id)}
+              icon={<span className="glyphicon glyphicon-trash" />} disabled={disabledActions} />
+            <Button className="btn btn-default btn-sm pull-right" onClick={() => selectTodo(todo.id)}
+              icon={<span className="glyphicon glyphicon-edit" />} disabled={disabledActions}/>
+          </li>
         ))
       }
     </ul>
@@ -14,14 +23,21 @@ const TodoList = ({data, editHandler, removeHandler}) => {
 };
 
 TodoList.propTypes = {
-  data: PropTypes.arrayOf(PropTypes.object),
-  editHandler: PropTypes.func,
-  removeHandler: PropTypes.func
+  data: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    completed: PropTypes.bool.isRequired
+  })),
+  selectTodo: PropTypes.func.isRequired,
+  removeTodo: PropTypes.func.isRequired,
+  updateTodo: PropTypes.func.isRequired,
+  disabledActions: PropTypes.bool
 };
 
-//default props for Form component.
+//default props for TodoList component.
 TodoList.defaultProps = {
-  data: []
+  data: [],
+  disabledActions: false
 };
 
 export default TodoList;
