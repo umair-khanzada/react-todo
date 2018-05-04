@@ -4,7 +4,6 @@
 }
 .todo-container{
     box-shadow: 0 0 5px 0.5px #ccc;
-    padding-bottom: 20px;
 }
 .radio-parent{
     margin-bottom: 10px;
@@ -27,4 +26,17 @@
 }
 form{
     height: 80px;
+}
+.filter-container{
+    background: #ccc;
+    padding: 10px;
+}
+.filters, .count{
+    display: inline-block;
+}
+.count{
+    width: 20%;
+}
+.filters{
+    width: 80%;
 }

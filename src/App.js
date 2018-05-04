@@ -9,91 +9,102 @@ class App extends Component {
 
     //initial state.
     this.state = {
-      mode: 'add', //enum: ['add', 'search']
-      selectedTodo: null, //for update todo item.
-      todoList: [
+      data: [
         {id: 1, text: 'Do something.', completed: false},
         {id: 2, text: 'Build todo app.', completed: false}
       ],
-      searchResult: []
+      selected: null, //for update todo item.
     };
 
     //binding ref.
-    this.handleChange = this.handleChange.bind(this);
-    this.search = this.search.bind(this);
+    // this.handleChange = this.handleChange.bind(this);
     this.selectTodo = this.selectTodo.bind(this);
     this.addTodo = this.addTodo.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
+    this.toggleTodo = this.toggleTodo.bind(this);
     this.removeTodo = this.removeTodo.bind(this);
   }
 
-  //handling change, run whenever change event occur.
-  handleChange(e){
-    this.setState({
-      mode: e.target.value,
-      selectedTodo: null,
-      searchResult: this.state.todoList
-    })
-  }
+  //handling change, run whenever mode change.
+  // handleChange(e){
+  //   this.setState({
+  //     mode: e.target.value,
+  //     selected: null
+  //   })
+  // }
 
   //search handler.
-  search(value){
-    this.setState({searchResult: this.state.todoList.filter(obj => obj.text.toLowerCase().includes(value))})
-  }
+  // search(value){
+  //   this.setState({searchResult: this.state.todoList.filter(obj => obj.text.toLowerCase().includes(value))})
+  // }
 
-  //select selectedTodo in state.
+  //update selectedTodo in state.
   selectTodo(id = 0){
     this.setState({
-      mode: 'add',
-      selectedTodo: this.state.todoList.find(obj => obj.id === id) || null
+      selected: this.state.data.find(obj => obj.id === id) || null
     });
   };
 
-  //add item in todoList.
-  addTodo(id, text){
-    const {todoList} = this.state;
+  //add item in data.
+  addTodo(text){
+    const {data} = this.state,
+      id = data.reduce((prev, current) => (prev > current.id) ? prev : current.id,  0) + 1; //generate unique id.
+
     this.setState({
-      todoList: [
-        {id: (todoList.length + 1), text, completed: false},
-        ...todoList
+      data: [
+        {id, text, completed: false},
+        ...data
       ]
     })
   }
 
   //toggle todo.
-  updateTodo(id, text){
-    const {todoList} = this.state,
-      index = todoList.findIndex(obj => obj.id === id);
+  toggleTodo(id){
+    const {data} = this.state,
+      index = data.findIndex(obj => obj.id === id);
 
-    //update todoList in state.
+    //update data in state.
     this.setState({
-      selectedTodo: null,
-      todoList: [
-        ...todoList.slice(0, index),
-        text ?
-          {...todoList[index], text} :
-          {...todoList[index], completed: !todoList[index].completed},
-        ...todoList.slice(index + 1)
+      data: [
+        ...data.slice(0, index),
+        {...data[index], completed: !data[index].completed},
+        ...data.slice(index + 1)
+      ]
+    })
+  };
+
+  //update todo.
+  updateTodo(text){
+    const {data, selected} = this.state,
+      index = data.findIndex(obj => obj.id === selected.id);
+
+    //update data in state.
+    this.setState({
+      selected: null,
+      data: [
+        ...data.slice(0, index),
+        {...data[index], text},
+        ...data.slice(index + 1)
       ]
     })
   };
 
   //remove todo.
   removeTodo(id){
-    const {todoList} = this.state,
-      index = todoList.findIndex(obj => obj.id === id);
+    const {data} = this.state,
+      index = data.findIndex(obj => obj.id === id);
 
-    //update todoList.
+    //update data.
     this.setState({
-      todoList: [
-        ...todoList.slice(0, index),
-        ...todoList.slice(index + 1)
+      data: [
+        ...data.slice(0, index),
+        ...data.slice(index + 1)
       ]
     })
   };
 
   render() {
-    const {mode, todoList, selectedTodo, searchResult} = this.state;
+    const {data, selected} = this.state;
 
     return (
       <div className="container">
@@ -101,6 +112,7 @@ class App extends Component {
           <div className="col-sm-offset-3 col-sm-6 todo-container">
             <h2 className="text-center">Todo List</h2>
             {/*TODO: Extract .radio-parent into a component if needed.*/}
+            {/*
             <div className="col-sm-12 radio-parent">
               <label className="radio-inline">
                 <input type="radio" value="add" name="mode" onChange={this.handleChange} checked={mode === 'add'}/>
@@ -111,13 +123,14 @@ class App extends Component {
                 Search
               </label>
             </div>
+            */}
             {
-              mode === 'add' ?
-                <Form key="add" selectedTodo={selectedTodo} onReset={this.selectTodo}
-                  onSubmit={selectedTodo ? this.updateTodo : this.addTodo} submitButton /> :
-                <Form key="search" placeHolder="Search todo." buttonLabel="Search" onInputChange={this.search} />
+              selected ?
+                <Form selected={selected} submitButtonLabel="update"
+                  onSubmit={this.updateTodo} onReset={this.selectTodo} /> :
+                <Form onSubmit={this.addTodo}/>
             }
-            <TodoList data={mode === 'add' ? todoList : searchResult} updateTodo={this.updateTodo} disabledActions={!!selectedTodo}
+            <TodoList data={data} toggleStatus={this.toggleTodo} disabledActions={!!selected}
               selectTodo={this.selectTodo} removeTodo={this.removeTodo}/>
           </div>
         </div>

@@ -1,24 +1,28 @@
-import React from 'react';
+import React , {Fragment} from 'react';
 import PropTypes from "prop-types";
 import CheckBox from './CheckBox';
 import Button from './Button';
+import Filters from './Filters';
 
-const TodoList = ({data, updateTodo, selectTodo, removeTodo, disabledActions}) => {
+const TodoList = ({data, toggleStatus, selectTodo, removeTodo, disabledActions}) => {
   return (
-    <ul className="todo-list">
-      {
-        data.map(todo => (
-          <li key={todo.id}>
-            <CheckBox onChange={() => updateTodo(todo.id)} disabled={disabledActions}/>
-            <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
-            <Button className="btn btn-default btn-sm pull-right" onClick={() => removeTodo(todo.id)}
-              icon={<span className="glyphicon glyphicon-trash" />} disabled={disabledActions} />
-            <Button className="btn btn-default btn-sm pull-right" onClick={() => selectTodo(todo.id)}
-              icon={<span className="glyphicon glyphicon-edit" />} disabled={disabledActions}/>
-          </li>
-        ))
-      }
-    </ul>
+    <Fragment>
+      <ul className="todo-list">
+        {
+          data.map(todo => (
+            <li key={todo.id}>
+              <CheckBox onChange={() => toggleStatus(todo.id)} disabled={disabledActions}/>
+              <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
+              <Button className="btn btn-default btn-sm pull-right" onClick={() => removeTodo(todo.id)}
+                icon={<span className="glyphicon glyphicon-trash" />} disabled={disabledActions} />
+              {todo.completed || <Button className="btn btn-default btn-sm pull-right" onClick={() => selectTodo(todo.id)}
+                icon={<span className="glyphicon glyphicon-edit" />} disabled={disabledActions}/>}
+            </li>
+          ))
+        }
+      </ul>
+      <Filters count={5} onChange={() => {}}/>
+    </Fragment>
   )
 };
 
@@ -30,7 +34,7 @@ TodoList.propTypes = {
   })),
   selectTodo: PropTypes.func.isRequired,
   removeTodo: PropTypes.func.isRequired,
-  updateTodo: PropTypes.func.isRequired,
+  toggleStatus: PropTypes.func.isRequired,
   disabledActions: PropTypes.bool
 };
 

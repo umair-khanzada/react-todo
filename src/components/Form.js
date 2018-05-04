@@ -17,28 +17,23 @@ class Form extends PureComponent{
 
   //life cycle hooks.
   componentDidMount(){
-    this.props.selectedTodo && this.setState({value: this.props.selectedTodo.text})
+    this.props.selected && this.setState({value: this.props.selected.text})
   }
 
   componentWillReceiveProps(nextProps){
-    nextProps.selectedTodo && this.setState({value: nextProps.selectedTodo.text})
+    nextProps.selected && this.setState({value: nextProps.selected.text})
   }
 
-  //handling change, run whenever change event occur.
+  //handling change, run whenever input change.
   handleChange(e){
-    const {value} = e.target,
-      {onInputChange} = this.props;
-
-    onInputChange && onInputChange(value);
-    this.setState({value})
+    this.setState({value: e.target.value})
   }
 
   onSubmit(e){
     e.preventDefault();
 
-    const {value} = this.state,
-      {selectedTodo} = this.props;
-    value && this.props.onSubmit(selectedTodo ? selectedTodo.id : null, value);
+    const {value} = this.state;
+    value && this.props.onSubmit(value);
     this.setState({value: ''});
   }
 
@@ -48,17 +43,17 @@ class Form extends PureComponent{
   }
 
   render(){
-    const {placeHolder, buttonLabel, selectedTodo, submitButton} = this.props,
+    const {placeHolder, submitButtonLabel, onReset} = this.props,
       {value} = this.state;
 
     return (
       <form onSubmit={this.onSubmit}>
-        <div className={`form-group col-sm-${selectedTodo ? 8 : 10}`}>
+        <div className={`form-group col-sm-${onReset ? 8 : 10}`}>
           <input type="text" className="form-control"
             placeholder={placeHolder} onChange={this.handleChange} value={value} />
         </div>
-        {selectedTodo && <Button text="cancel" onClick={this.onReset} />}
-        {submitButton && <Button type="submit" disabled={!value} text={selectedTodo ? 'update' : buttonLabel} />}
+        {onReset && <Button text="cancel" onClick={this.onReset} />}
+        <Button type="submit" text={submitButtonLabel} disabled={!value} />
       </form>
     )
   }
@@ -68,10 +63,8 @@ Form.propTypes = {
   onSubmit: PropTypes.func,
   onReset: PropTypes.func,
   placeHolder: PropTypes.string,
-  buttonLabel: PropTypes.string,
-  onInputChange: PropTypes.func,
-  submitButton: PropTypes.bool,
-  selectedTodo: PropTypes.shape({
+  submitButtonLabel: PropTypes.string.isRequired,
+  selected: PropTypes.shape({
     text: PropTypes.string.isRequired
   })
 };
@@ -79,9 +72,8 @@ Form.propTypes = {
 //default props for Form component.
 Form.defaultProps = {
   placeHolder: "Add todo.",
-  buttonLabel: "Add",
+  submitButtonLabel: "add",
   onSubmit: () => {},
-  onReset: () => {}
 };
 
 export default Form;
