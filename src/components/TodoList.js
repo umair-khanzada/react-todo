@@ -14,7 +14,6 @@ class TodoList extends Component{
   }
 
   handleFilterChange(e){
-    console.log("e.target.value", e.target.value);
     this.setState({filterBy: e.target.value});
   }
 

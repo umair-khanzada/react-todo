@@ -40,3 +40,6 @@ form{
 .filters{
     width: 80%;
 }
+.checkbox-inline input[type="radio"]{
+    margin-right: 5px;
+}

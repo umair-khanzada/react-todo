@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from "prop-types";
 import Button from "./Button";
 
-const RadioButton = ({onChange, labelText, disabled}) => {
+const RadioButton = ({onChange, value, name, labelText, checked, disabled}) => {
   return (
     <label className="checkbox-inline">
-      <input type="radio" onChange={onChange} disabled={disabled} />
+      <input type="radio" onChange={onChange} value={value} name={name} disabled={disabled} defaultChecked={checked} />
       {labelText}
     </label>
   )
@@ -13,6 +13,11 @@ const RadioButton = ({onChange, labelText, disabled}) => {
 
 RadioButton.propTypes = {
   onChange: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.bool
+  ]).isRequired,
+  name: PropTypes.string.isRequired,
   labelText: PropTypes.string,
   disabled: PropTypes.bool
 };
