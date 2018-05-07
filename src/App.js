@@ -25,19 +25,6 @@ class App extends Component {
     this.removeTodo = this.removeTodo.bind(this);
   }
 
-  //handling change, run whenever mode change.
-  // handleChange(e){
-  //   this.setState({
-  //     mode: e.target.value,
-  //     selected: null
-  //   })
-  // }
-
-  //search handler.
-  // search(value){
-  //   this.setState({searchResult: this.state.todoList.filter(obj => obj.text.toLowerCase().includes(value))})
-  // }
-
   //update selectedTodo in state.
   selectTodo(id = 0){
     this.setState({
@@ -111,19 +98,6 @@ class App extends Component {
         <div className="row">
           <div className="col-sm-offset-3 col-sm-6 todo-container">
             <h2 className="text-center">Todo List</h2>
-            {/*TODO: Extract .radio-parent into a component if needed.*/}
-            {/*
-            <div className="col-sm-12 radio-parent">
-              <label className="radio-inline">
-                <input type="radio" value="add" name="mode" onChange={this.handleChange} checked={mode === 'add'}/>
-                Add
-              </label>
-              <label className="radio-inline">
-                <input type="radio" value="search" name="mode" onChange={this.handleChange} checked={mode === 'search'}/>
-                Search
-              </label>
-            </div>
-            */}
             {
               selected ?
                 <Form selected={selected} submitButtonLabel="update"
