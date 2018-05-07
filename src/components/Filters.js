@@ -6,9 +6,9 @@ const Filters = ({onChange, count}) => {
   return (
     <div className="filter-container">
       <div className="filters">
-        <RadioButton onChange={onChange} labelText="All"/>
-        <RadioButton onChange={onChange} labelText="Remaining"/>
-        <RadioButton onChange={onChange} labelText="Completed"/>
+        <RadioButton onChange={onChange} value={'all'} name="filters" labelText="All" checked/>
+        <RadioButton onChange={onChange} value={'not_completed'} name="filters" labelText="Remaining"/>
+        <RadioButton onChange={onChange} value={'completed'} name="filters" labelText="Completed"/>
       </div>
       <div className="count">Total: &nbsp;&nbsp;{count}</div>
     </div>
