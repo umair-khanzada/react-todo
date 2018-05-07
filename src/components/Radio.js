@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import Button from "./Button";
 
 const RadioButton = ({onChange, value, name, labelText, checked, disabled}) => {
   return (
     <label className="checkbox-inline">
-      <input type="radio" onChange={onChange} value={value} name={name} disabled={disabled} defaultChecked={checked} />
+      <input type="radio" onChange={onChange} value={value} name={name} disabled={disabled} checked={checked} />
       {labelText}
     </label>
   )

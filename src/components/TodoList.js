@@ -38,7 +38,7 @@ class TodoList extends Component{
             ))
           }
         </ul>
-        <Filters count={filteredData.length} onChange={this.handleFilterChange}/>
+        <Filters count={filteredData.length} onChange={this.handleFilterChange} checked={filterBy}/>
       </Fragment>
     )
   }

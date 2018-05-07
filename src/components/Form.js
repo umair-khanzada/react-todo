@@ -26,7 +26,10 @@ class Form extends PureComponent{
 
   //handling change, run whenever input change.
   handleChange(e){
-    this.setState({value: e.target.value})
+    const {onInputChange} = this.props,
+      {value} = e.target;
+    this.setState({value});
+    onInputChange && onInputChange(value)
   }
 
   onSubmit(e){
@@ -53,7 +56,7 @@ class Form extends PureComponent{
             placeholder={placeHolder} onChange={this.handleChange} value={value} />
         </div>
         {onReset && <Button text="cancel" onClick={this.onReset} />}
-        <Button type="submit" text={submitButtonLabel} disabled={!value} />
+        {submitButtonLabel && <Button type="submit" text={submitButtonLabel} disabled={!value} />}
       </form>
     )
   }
@@ -62,8 +65,9 @@ class Form extends PureComponent{
 Form.propTypes = {
   onSubmit: PropTypes.func,
   onReset: PropTypes.func,
+  onInputChange: PropTypes.func,
   placeHolder: PropTypes.string,
-  submitButtonLabel: PropTypes.string.isRequired,
+  submitButtonLabel: PropTypes.string,
   selected: PropTypes.shape({
     text: PropTypes.string.isRequired
   })
@@ -72,7 +76,6 @@ Form.propTypes = {
 //default props for Form component.
 Form.defaultProps = {
   placeHolder: "Add todo.",
-  submitButtonLabel: "add",
   onSubmit: () => {},
 };
 

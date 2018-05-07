@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Form from './components/Form';
 import TodoList from './components/TodoList';
+import RadioButton from './components/Radio';
 import './App.css';
 
 class App extends Component {
@@ -14,10 +15,14 @@ class App extends Component {
         {id: 2, text: 'Build todo app.', completed: false}
       ],
       selected: null, //for update todo item.
+      mode: 'add',
+      query: ''
     };
 
     //binding ref.
     // this.handleChange = this.handleChange.bind(this);
+    this.toggleMode = this.toggleMode.bind(this);
+    this.search = this.search.bind(this);
     this.selectTodo = this.selectTodo.bind(this);
     this.addTodo = this.addTodo.bind(this);
     this.updateTodo = this.updateTodo.bind(this);
@@ -25,9 +30,19 @@ class App extends Component {
     this.removeTodo = this.removeTodo.bind(this);
   }
 
+  toggleMode(e){
+    this.setState({mode: e.target.value, query: ''})
+  }
+
+  search(query){
+    this.setState({query})
+  }
+
   //update selectedTodo in state.
   selectTodo(id = 0){
     this.setState({
+      mode: 'add',
+      query: '',
       selected: this.state.data.find(obj => obj.id === id) || null
     });
   };
@@ -91,20 +106,27 @@ class App extends Component {
   };
 
   render() {
-    const {data, selected} = this.state;
+    const {data, selected, mode, query} = this.state,
+      filteredByQuery = data.filter((obj) => obj.text.toLowerCase().includes(query));
 
     return (
       <div className="container">
         <div className="row">
           <div className="col-sm-offset-3 col-sm-6 todo-container">
             <h2 className="text-center">Todo List</h2>
+            <div>
+              <RadioButton onChange={this.toggleMode} value={'add'} name="mode" labelText="Add | Update" checked={mode === 'add'} />
+              <RadioButton onChange={this.toggleMode} value={'search'} name="mode" labelText="Search" checked={mode === 'search'} />
+            </div>
             {
-              selected ?
-                <Form selected={selected} submitButtonLabel="update"
-                  onSubmit={this.updateTodo} onReset={this.selectTodo} /> :
-                <Form onSubmit={this.addTodo}/>
+              mode === 'search' ?
+                <Form key="search" placeHolder="Search" onInputChange={this.search}/> :
+                selected ?
+                  <Form key="update" selected={selected} submitButtonLabel="update"
+                    onSubmit={this.updateTodo} onReset={this.selectTodo} /> :
+                  <Form key="add" onSubmit={this.addTodo} submitButtonLabel="add"/>
             }
-            <TodoList data={data} toggleStatus={this.toggleTodo} disabledActions={!!selected}
+            <TodoList data={filteredByQuery} toggleStatus={this.toggleTodo} disabledActions={!!selected}
               selectTodo={this.selectTodo} removeTodo={this.removeTodo}/>
           </div>
         </div>
