@@ -1,30 +1,49 @@
-import React , {Fragment} from 'react';
+import React , {Component, Fragment} from 'react';
 import PropTypes from "prop-types";
 import CheckBox from './CheckBox';
 import Button from './Button';
 import Filters from './Filters';
 
-const TodoList = ({data, toggleStatus, selectTodo, removeTodo, disabledActions}) => {
-  return (
-    <Fragment>
-      <ul className="todo-list">
-        {
-          data.map(todo => (
-            <li key={todo.id}>
-              <CheckBox onChange={() => toggleStatus(todo.id)} disabled={disabledActions}/>
-              <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
-              <Button className="btn btn-default btn-sm pull-right" onClick={() => removeTodo(todo.id)}
-                icon={<span className="glyphicon glyphicon-trash" />} disabled={disabledActions} />
-              {todo.completed || <Button className="btn btn-default btn-sm pull-right" onClick={() => selectTodo(todo.id)}
-                icon={<span className="glyphicon glyphicon-edit" />} disabled={disabledActions}/>}
-            </li>
-          ))
-        }
-      </ul>
-      <Filters count={5} onChange={() => {}}/>
-    </Fragment>
-  )
-};
+class TodoList extends Component{
+  constructor(props){
+    super(props);
+
+    this.state = {filterBy: 'all'};
+
+    this.handleFilterChange = this.handleFilterChange.bind(this);
+  }
+
+  handleFilterChange(e){
+    console.log("e.target.value", e.target.value);
+    this.setState({filterBy: e.target.value});
+  }
+
+  render(){
+    const {data, toggleStatus, selectTodo, removeTodo, disabledActions} = this.props,
+      {filterBy} = this.state,
+      filteredData = filterBy === 'all' ? [...data] : data.filter(obj => filterBy === 'completed' ? obj.completed : !obj.completed) ;
+
+    return (
+      <Fragment>
+        <ul className="todo-list">
+          {
+            filteredData.map(todo => (
+              <li key={todo.id}>
+                <CheckBox onChange={() => toggleStatus(todo.id)} checked={todo.completed} disabled={disabledActions}/>
+                <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
+                <Button className="btn btn-default btn-sm pull-right" onClick={() => removeTodo(todo.id)}
+                  icon={<span className="glyphicon glyphicon-trash" />} disabled={disabledActions} />
+                {todo.completed || <Button className="btn btn-default btn-sm pull-right" onClick={() => selectTodo(todo.id)}
+                                     icon={<span className="glyphicon glyphicon-edit" />} disabled={disabledActions}/>}
+              </li>
+            ))
+          }
+        </ul>
+        <Filters count={filteredData.length} onChange={this.handleFilterChange}/>
+      </Fragment>
+    )
+  }
+}
 
 TodoList.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
