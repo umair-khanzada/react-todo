@@ -1,14 +1,26 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import RadioButton from './Radio';
+import RadioButton from './RadioButton';
 
 const Filters = ({onChange, checked, count}) => {
+  const filters = [
+    { value: 'all', label: 'All' },
+    { value: 'not_completed', label: 'Remaining' },
+    { value: 'completed', label: 'Completed' }
+  ];
+
   return (
     <div className="filter-container">
       <div className="filters">
-        <RadioButton onChange={onChange} value={'all'} name="filters" labelText="All" checked={checked === 'all'}/>
-        <RadioButton onChange={onChange} value={'not_completed'} name="filters" labelText="Remaining" checked={checked === 'not_completed'}/>
-        <RadioButton onChange={onChange} value={'completed'} name="filters" labelText="Completed" checked={checked === 'completed'}/>
+        {filters.map(filter => (
+          <RadioButton
+            onChange={onChange}
+            value={filter.value}
+            name={'filters'}
+            labelText={filter.label}
+            checked={checked === filter.value}
+          />
+        ))}
       </div>
       <div className="count">Total: &nbsp;&nbsp;{count}</div>
     </div>
