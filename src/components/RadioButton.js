@@ -21,7 +21,6 @@ RadioButton.propTypes = {
   disabled: PropTypes.bool
 };
 
-//default props for Button component.
 RadioButton.defaultProps = {
   disabled: false
 };
