@@ -19,7 +19,7 @@ class TodoList extends Component{
 
   render(){
     const {data, toggleStatus, selectTodo, removeTodo, disabledActions} = this.props,
-      {filterBy} = this.state,
+      { filterBy } = this.state,
       filteredData = filterBy === 'all' ? [...data] : data.filter(obj => filterBy === 'completed' ? obj.completed : !obj.completed) ;
 
     return (
@@ -30,10 +30,20 @@ class TodoList extends Component{
               <li key={todo.id}>
                 <CheckBox onChange={() => toggleStatus(todo.id)} checked={todo.completed} disabled={disabledActions}/>
                 <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
-                <Button className="btn btn-default btn-sm pull-right" onClick={() => removeTodo(todo.id)}
-                  icon={<span className="glyphicon glyphicon-trash" />} disabled={disabledActions} />
-                {todo.completed || <Button className="btn btn-default btn-sm pull-right" onClick={() => selectTodo(todo.id)}
-                                     icon={<span className="glyphicon glyphicon-edit" />} disabled={disabledActions}/>}
+                <Button
+                  lassName="btn btn-default btn-sm pull-right"
+                  onClick={() => removeTodo(todo.id)}
+                  icon={<span className="glyphicon glyphicon-trash" />}
+                  disabled={disabledActions}
+                />
+                {todo.completed ||
+                  <Button
+                    className="btn btn-default btn-sm pull-right"
+                    onClick={() => selectTodo(todo.id)}
+                    icon={<span className="glyphicon glyphicon-edit" />}
+                    disabled={disabledActions}
+                  />
+                }
               </li>
             ))
           }
