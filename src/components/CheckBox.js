@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from "prop-types";
-import Button from "./Button";
 
 const CheckBox = ({onChange, checked, labelText, disabled}) => {
   return (
@@ -18,7 +17,6 @@ CheckBox.propTypes = {
   disabled: PropTypes.bool
 };
 
-//default props for Button component.
 CheckBox.defaultProps = {
   disabled: false
 };
