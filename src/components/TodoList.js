@@ -31,7 +31,7 @@ class TodoList extends Component{
                 <CheckBox onChange={() => toggleStatus(todo.id)} checked={todo.completed} disabled={disabledActions}/>
                 <span className={todo.completed ? 'completed' : ''}>{todo.text}</span>
                 <Button
-                  lassName="btn btn-default btn-sm pull-right"
+                  className="btn btn-default btn-sm pull-right"
                   onClick={() => removeTodo(todo.id)}
                   icon={<span className="glyphicon glyphicon-trash" />}
                   disabled={disabledActions}
