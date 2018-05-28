@@ -6,16 +6,13 @@ class Form extends PureComponent{
   constructor(props){
     super(props);
 
-    //initial state.
     this.state = {value: ''};
 
-    //binding ref.
     this.handleChange = this.handleChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onReset = this.onReset.bind(this);
   }
 
-  //life cycle hooks.
   componentDidMount(){
     this.props.selected && this.setState({value: this.props.selected.text})
   }
@@ -24,7 +21,6 @@ class Form extends PureComponent{
     nextProps.selected && this.setState({value: nextProps.selected.text})
   }
 
-  //handling change, run whenever input change.
   handleChange(e){
     const {onInputChange} = this.props,
       {value} = e.target;
